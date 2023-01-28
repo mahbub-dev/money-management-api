@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const auth = require("./Router/auth");
+const serveUploads = require("./uploads/serveUploads");
+const client = require("./Router/client");
 dotenv.config();
 
 const app = express();
@@ -15,8 +17,10 @@ app.use(
 );
 
 // router
-app.use("/auth", auth);
 
+app.use("/auth", auth);
+app.use("/client", client);
+app.use("/uploads", serveUploads);
 // creating a server and connect with database
 app.listen(process.env.PORT || 4000, (err, data) => {
 	if (err) {
