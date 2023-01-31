@@ -16,4 +16,17 @@ authDb.createUser = async (data) => {
 	}
 };
 
+// login
+authDb.login = async (email) => {
+	try {
+		const user = await User.findOne({ email });
+		if (user) {
+			return user;
+		} else {
+			throw new Error("user not found");
+		}
+	} catch (error) {
+		throw new Error(error.message);
+	}
+};
 module.exports = authDb;

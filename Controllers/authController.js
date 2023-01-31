@@ -5,9 +5,9 @@ const authDb = require("../Repository/authDb");
 // create user
 const registerUser = async (req, res) => {
 	try {
-		const data = await authService.createUser(req.body.data);
-		let success = await authDb.createUser(data);
-		res.status(201).json(success);
+		const user = await authService.createUser(req.body.data);
+		
+		res.status(201).json(user);
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: error.message });
@@ -16,21 +16,12 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
 	const { email, password } = req.params;
-	let error = {};
-	let success = {};
 	try {
-		const user = await User.findOne({ email });
-		if (user) {
-			user?.password === password
-				? (success.user = user)
-				: (error = { msg: "wrong credintials", status: 404 });
-		} else {
-			error = { msg: "wrong credintials", status: 404 };
-		}
-		response(res, error, success);
-	} catch (err) {
-		console.log(err);
-		response(res, { server: err, status: 500 });
+		const user = await authService.login(email, password);
+		res.status(200).json(user);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json(error.message);
 	}
 };
 module.exports = { registerUser, loginUser };
