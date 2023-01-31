@@ -5,7 +5,7 @@ const {
 	updateClient,
 	getClient,
 	deleteClient,
-} = require("../Controller/clientController");
+} = require("../Controllers/clientController");
 
 // create client
 const multer = require("multer");

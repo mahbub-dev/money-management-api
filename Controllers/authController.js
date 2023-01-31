@@ -1,24 +1,19 @@
-const User = require("../Models/User.js");
-const { response } = require("../Utils/utils");
-const router = require("express").Router();
-const express = require("mongoose");
-const bcrypt = require("bcrypt");
+// const { response } = require("../Utils/utils");
+const authService = require("../Services/authService");
+const authDb = require("../Repository/authDb");
 
+// create user
 const registerUser = async (req, res) => {
-	const { name, phone, email, profilePicture, password } = req.body.data;
-	let error = {};
-	let success = {};
 	try {
-		const user = new User({ name, phone, email, profilePicture, password });
-		success.user = await user.save();
-		response(res, error, success);
-	} catch (err) {
-		console.log(err);
-		error.server = err;
-		error.status = 500;
-		response(res, error);
+		const data = await authService.createUser(req.body.data);
+		let success = await authDb.createUser(data);
+		res.status(201).json(success);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: error.message });
 	}
 };
+
 const loginUser = async (req, res) => {
 	const { email, password } = req.params;
 	let error = {};
