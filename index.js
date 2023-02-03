@@ -16,11 +16,18 @@ app.use(
 	})
 );
 
-// router
 
+// router
 app.use("/auth", auth);
 app.use("/client", client);
 app.use("/uploads", serveUploads);
+
+
+// error handller setup
+app.use((err, req, res, next) => {
+	res.status(err.status).json(err.message);
+});
+
 // creating a server and connect with database
 app.listen(process.env.PORT || 4000, (err, data) => {
 	if (err) {

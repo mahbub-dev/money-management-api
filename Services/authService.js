@@ -1,4 +1,5 @@
 ﻿const authDb = require("../Repository/authDb");
+const { createError } = require("../Utils/errorHandler");
 const bcrypt = require("bcrypt");
 
 // module scafholding
@@ -15,10 +16,10 @@ authService.createUser = async (data) => {
 			let success = await authDb.createUser(rest);
 			return success;
 		} else {
-			throw new Error("invalid input");
+			createError("invalid input", 400);
 		}
 	} catch (errorService) {
-		throw new Error(errorService);
+		throw errorService;
 	}
 };
 
@@ -29,7 +30,7 @@ authService.login = async (email, password) => {
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (isMatch) return user;
 	} catch (error) {
-		throw new Error(error.message);
+		throw error
 	}
 };
 module.exports = authService;

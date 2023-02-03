@@ -35,6 +35,6 @@ router.put("/", updateClient);
 router.get("/", getClient);
 
 // delete client
-router.delete("/", deleteClient);
+router.delete("/:id", deleteClient);
 
 module.exports = router;

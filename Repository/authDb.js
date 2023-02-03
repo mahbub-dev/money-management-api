@@ -1,18 +1,23 @@
 ﻿const User = require("../Models/User.js");
+const { createError } = require("../Utils/errorHandler");
 
 // module scafholding
 const authDb = {};
 // create user
 authDb.createUser = async (data) => {
 	try {
-		if (await User.findOne({ email: data.email })) {
-			throw new Error("user is already exist");
+		if (
+			await User.findOne({
+				$or: [{ email: data.email }, { phone: data.phone }],
+			})
+		) {
+			createError("user is already exist", 400);
 		} else {
 			const user = new User(data);
 			return await user.save();
 		}
 	} catch (error) {
-		throw new Error(error.message);
+		throw error;
 	}
 };
 
@@ -23,10 +28,10 @@ authDb.login = async (email) => {
 		if (user) {
 			return user;
 		} else {
-			throw new Error("user not found");
+			createError("user not found", 404);
 		}
 	} catch (error) {
-		throw new Error(error.message);
+		throw error;
 	}
 };
 module.exports = authDb;
